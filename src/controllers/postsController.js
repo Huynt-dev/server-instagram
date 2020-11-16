@@ -10,18 +10,35 @@ module.exports.posts = async function (req, res) {
 module.exports.likePost = async function (req, res) {
   const userId = req.user._id;
   const postId = req.params.id;
-  // await Posts.update()
-  await Posts.updateOne(
-    { _id: postId },
-    {
-      $push: {
-        likes: userId
-      },
-      $inc: {
-        totalLike: 1
-      }
-    }
-  );
+  const postLike = await Posts.findOne({ _id: postId });
 
-  res.json({ message: "Like thanh cong" });
+  if (postLike.likes.includes(userId)) {
+    await Posts.updateOne(
+      { _id: postId },
+      {
+        $pull: {
+          likes: userId
+        },
+        $inc: {
+          totalLike: -1
+        }
+      }
+    );
+
+    return res.status(200).json({ like: false });
+  } else {
+    await Posts.updateOne(
+      { _id: postId },
+      {
+        $push: {
+          likes: userId
+        },
+        $inc: {
+          totalLike: 1
+        }
+      }
+    );
+
+    return res.status(200).json({ like: true });
+  }
 };

@@ -2,7 +2,7 @@ var jwt = require("jsonwebtoken");
 const getUsers = require("../models/userModels.js");
 module.exports.users = async function (req, res) {
   var users = await getUsers.find();
-  res.json(users);
+  res.json({ users });
 };
 
 module.exports.login = async function (req, res) {
