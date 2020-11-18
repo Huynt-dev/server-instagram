@@ -13,7 +13,7 @@ module.exports.likePost = async function (req, res) {
   const postLike = await Posts.findOne({ _id: postId });
 
   if (postLike.likes.includes(userId)) {
-    await Posts.updateOne(
+    const post = await Posts.updateOne(
       { _id: postId },
       {
         $pull: {
@@ -22,12 +22,13 @@ module.exports.likePost = async function (req, res) {
         $inc: {
           totalLike: -1
         }
-      }
+      },
+      { new: true }
     );
 
-    return res.status(200).json({ like: false });
+    return res.status(200).json(post);
   } else {
-    await Posts.updateOne(
+    const post = await Posts.updateOne(
       { _id: postId },
       {
         $push: {
@@ -36,9 +37,10 @@ module.exports.likePost = async function (req, res) {
         $inc: {
           totalLike: 1
         }
-      }
+      },
+      { new: true }
     );
 
-    return res.status(200).json({ like: true });
+    return res.status(200).json(post);
   }
 };

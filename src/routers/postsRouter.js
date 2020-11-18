@@ -3,6 +3,6 @@ const posts = express.Router();
 const postsController = require("../controllers/postsController.js");
 posts.get("/", postsController.posts);
 
-posts.put("/:id", postsController.likePost);
+posts.put("/:id/like", postsController.likePost);
 
 module.exports = posts;
