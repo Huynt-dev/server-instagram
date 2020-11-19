@@ -8,7 +8,9 @@ module.exports.users = async function (req, res) {
 module.exports.login = async function (req, res) {
   try {
     const { email, password } = req.body;
-    const user = await getUsers.findOne({ email, password });
+    const user = await getUsers
+      .findOne({ email, password })
+      .select("user email avatar ");
 
     if (!user) {
       return res.status(401).json({ error: "Email or password is invalid" });
@@ -17,12 +19,12 @@ module.exports.login = async function (req, res) {
     const dataSign = {
       email: user.email,
       _id: user._id,
-      name: user.name
+      name: user.user
     };
 
     const token = await jwt.sign(dataSign, process.env.JWT_KEY);
 
-    res.json({ token });
+    res.json({ token, user });
   } catch (error) {
     res.status(400).send(error);
   }
