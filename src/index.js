@@ -12,10 +12,12 @@ const isAuth = require("./middleware/isAuth.js");
 
 const routerUsers = require("./routers/userRouter.js");
 const routerPosts = require("./routers/postsRouter.js");
+const routerComment = require("./routers/commentRouter");
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
@@ -28,6 +30,7 @@ app.get("/", function (req, res) {
 
 app.use("/users", routerUsers);
 app.use("/posts", isAuth, routerPosts);
+app.use("/comment", isAuth, routerComment);
 app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500).send("Something broke!");

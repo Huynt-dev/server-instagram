@@ -4,7 +4,7 @@ var postSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Types.ObjectId,
-      ref: "User"
+      ref: "user"
     },
     image: String,
     content: String,
@@ -20,6 +20,6 @@ var postSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-var getPosts = mongoose.model("getPosts", postSchema, "posts");
+var post = mongoose.model("post", postSchema);
 
-module.exports = getPosts;
+module.exports = post;

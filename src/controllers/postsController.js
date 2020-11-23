@@ -1,11 +1,23 @@
 const Posts = require("../models/postsModels.js");
+
 // const mongoose = require("mongoose");
 
 module.exports.posts = async function (req, res) {
   // console.log(req.user);
+  // query
 
-  var posts = await Posts.find().sort({ createdAt: -1 });
-  res.json({ posts });
+  try {
+    var posts = await Posts.find()
+      .populate({
+        path: "user",
+        select: "avatar user"
+      })
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json({ posts });
+  } catch (e) {
+    res.status(500).json({ e });
+  }
 };
 
 module.exports.likePost = async function (req, res) {
@@ -55,6 +67,13 @@ module.exports.createPost = async function (req, res) {
       content: postNew,
       image: req.file.filename
     });
+
+    await post
+      .populate({
+        path: "user",
+        select: "avatar user"
+      })
+      .execPopulate();
     return res.status(200).json({ post });
   } catch (error) {
     console.error(error);
