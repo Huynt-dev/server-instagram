@@ -1,13 +1,24 @@
 const mongoose = require("mongoose");
 
-var postSchema = new mongoose.Schema({
-  _id: mongoose.Types.ObjectId,
-  userPost: String,
-  image: String,
-  content: String,
-  likes: Array,
-  totalLike: Number
-});
+var postSchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Types.ObjectId,
+      ref: "User"
+    },
+    image: String,
+    content: String,
+    likes: {
+      type: Array,
+      default: []
+    },
+    totalLike: {
+      type: Number,
+      default: 0
+    }
+  },
+  { timestamps: true }
+);
 
 var getPosts = mongoose.model("getPosts", postSchema, "posts");
 
