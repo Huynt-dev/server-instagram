@@ -1,22 +1,72 @@
 const Posts = require("../models/postsModels.js");
 
-// const mongoose = require("mongoose");
-
 module.exports.posts = async function (req, res) {
-  // console.log(req.user);
-  // query
-
   try {
-    var posts = await Posts.find()
-      .populate({
-        path: "user",
-        select: "avatar user"
-      })
-      .sort({ createdAt: -1 });
+    var posts = await Posts.aggregate([
+      {
+        $lookup: {
+          from: "users",
+          localField: "user",
+          foreignField: "_id",
+          as: "user"
+        }
+      },
+      {
+        $unwind: "$user"
+      },
+      {
+        $lookup: {
+          from: "comments",
+          let: { postId: "$_id" },
+          pipeline: [
+            {
+              $match: { $expr: { $eq: ["$$postId", "$post"] } }
+            },
+            {
+              $lookup: {
+                from: "users",
+                localField: "user",
+                foreignField: "_id",
+                as: "user"
+              }
+            },
+            {
+              $unwind: "$user"
+            },
+            {
+              $project: {
+                user: {
+                  user: 1,
+                  avatar: 1
+                },
+                content: 1
+              }
+            }
+          ],
+          as: "comments"
+        }
+      },
+      {
+        $project: {
+          user: {
+            user: 1,
+            avatar: 1
+          },
+          image: 1,
+          content: 1,
+          likes: 1,
+          totalLike: 1,
+          comments: {
+            content: 1,
+            user: 1
+          }
+        }
+      }
+    ]);
 
     return res.status(200).json({ posts });
   } catch (e) {
-    res.status(500).json({ e });
+    res.status(400).json({ e });
   }
 };
 
