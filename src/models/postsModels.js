@@ -15,6 +15,10 @@ var postSchema = new mongoose.Schema(
     totalLike: {
       type: Number,
       default: 0
+    },
+    totalComment: {
+      type: Number,
+      default: 0
     }
   },
   { timestamps: true }

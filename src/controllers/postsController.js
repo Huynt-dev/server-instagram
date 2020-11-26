@@ -2,6 +2,7 @@ const Posts = require("../models/postsModels.js");
 
 module.exports.posts = async function (req, res) {
   try {
+    /*
     var posts = await Posts.aggregate([
       {
         $lookup: {
@@ -63,6 +64,12 @@ module.exports.posts = async function (req, res) {
         }
       }
     ]);
+    */
+
+    var posts = await Posts.find().sort({ createdAt: -1 }).populate({
+      path: "user",
+      select: "user avatar"
+    });
 
     return res.status(200).json({ posts });
   } catch (e) {
