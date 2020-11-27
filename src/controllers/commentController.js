@@ -39,9 +39,32 @@ module.exports.getCommentByPost = async function (req, res) {
     const id = req.params.id;
     const comments = await Comment.find({ post: id }).populate({
       path: "user",
+
       select: "user avatar"
     });
     res.status(200).json({ comments });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+};
+
+module.exports.removeComment = async function (req, res) {
+  try {
+    const { idPost } = req.body;
+    const idComment = req.params.id;
+    const rm = await Comment.findOneAndRemove({ _id: idComment });
+    if (rm) {
+      await Posts.findOneAndUpdate(
+        { _id: idPost },
+        {
+          $inc: {
+            totalComment: -1
+          }
+        },
+        { new: true }
+      );
+    }
+    res.status(200).json({ idComment });
   } catch (error) {
     res.status(400).json({ error });
   }
