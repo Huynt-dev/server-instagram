@@ -2,8 +2,12 @@ const mongoose = require("mongoose");
 
 var userSchema = new mongoose.Schema({
   user: String,
+  name: String,
   email: String,
-  image: String,
+  image: {
+    type: String,
+    default: "https://robohash.org/temporibusonisadipisci.png?size=300x300"
+  },
   password: String
 });
 
