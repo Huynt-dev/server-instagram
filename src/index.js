@@ -8,6 +8,7 @@ const app = express();
 
 const isAuth = require("./middleware/isAuth.js");
 
+const routerAuth = require("./routers/authRouter.js");
 const routerUsers = require("./routers/userRouter.js");
 const routerPosts = require("./routers/postsRouter.js");
 const routerComment = require("./routers/commentRouter");
@@ -26,6 +27,7 @@ app.get("/", function (req, res) {
   res.send("Hello World!");
 });
 
+app.use("/auth", routerAuth);
 app.use("/users", routerUsers);
 app.use("/posts", isAuth, routerPosts);
 app.use("/comment", isAuth, routerComment);
