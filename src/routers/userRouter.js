@@ -7,4 +7,8 @@ users.get("/", userController.users);
 users.post("/login", userController.login);
 
 users.post("/register", userController.register);
+
+users.get("/:id/profile", userController.profile);
+
+users.get("/friend", userController.friend);
 module.exports = users;

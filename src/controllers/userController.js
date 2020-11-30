@@ -1,19 +1,24 @@
 var jwt = require("jsonwebtoken");
-const getUsers = require("../models/userModels.js");
+const bcrypt = require("bcryptjs");
+const users = require("../models/userModels.js");
 module.exports.users = async function (req, res) {
-  var users = await getUsers.find();
-  res.json({ users });
+  var data = await users.find();
+  res.json({ data });
 };
 
 module.exports.login = async function (req, res) {
   try {
     const { email, password } = req.body;
-    const user = await getUsers
-      .findOne({ email, password })
-      .select("user email avatar ");
+    const user = await users.findOne({ email }).lean();
 
     if (!user) {
-      return res.status(401).json({ error: "Email or password is invalid" });
+      return res.status(401).json({ error: "Email is invalid" });
+    }
+
+    const isCorrectPassword = await bcrypt.compare(password, user.password);
+
+    if (!isCorrectPassword) {
+      return res.status(401).json({ error: "Password is invalid" });
     }
 
     const dataSign = {
@@ -23,8 +28,9 @@ module.exports.login = async function (req, res) {
     };
 
     const token = await jwt.sign(dataSign, process.env.JWT_KEY);
+    delete user.password;
 
-    res.json({ token, user });
+    res.status(200).json({ token, user });
   } catch (error) {
     res.status(400).send(error);
   }
@@ -33,11 +39,9 @@ module.exports.login = async function (req, res) {
 module.exports.register = async (req, res) => {
   try {
     const { email, name, user, password } = req.body;
-    const existedUser = await getUsers.findOne({
+    const existedUser = await users.findOne({
       $or: [{ email: email }, { user: user }]
     });
-
-    console.log(existedUser);
 
     if (existedUser) {
       return res.status(400).json({
@@ -45,9 +49,27 @@ module.exports.register = async (req, res) => {
       });
     }
 
-    const newUser = await getUsers.create(req.body);
+    const hashPassword = await bcrypt.hash(password, 10);
 
-    res.status(200).json({ user: newUser });
+    await users.create({
+      email,
+      name,
+      user,
+      password: hashPassword
+    });
+
+    res.status(200).json({ user: "ok" });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
+};
+
+module.exports.profile = async (req, res) => {};
+
+module.exports.friend = async (req, res) => {
+  try {
+    var data = await users.find().select("email name avatar");
+    res.status(200).json({ data });
   } catch (error) {
     res.status(400).json({ error });
   }

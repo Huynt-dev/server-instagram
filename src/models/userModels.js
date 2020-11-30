@@ -4,7 +4,7 @@ var userSchema = new mongoose.Schema({
   user: String,
   name: String,
   email: String,
-  image: {
+  avatar: {
     type: String,
     default: "https://robohash.org/temporibusonisadipisci.png?size=300x300"
   },

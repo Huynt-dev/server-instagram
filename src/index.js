@@ -6,8 +6,6 @@ const mongoose = require("mongoose");
 const path = require("path");
 const app = express();
 
-// const bcrypt = require("bcryptjs");
-
 const isAuth = require("./middleware/isAuth.js");
 
 const routerUsers = require("./routers/userRouter.js");
