@@ -2,70 +2,6 @@ const Posts = require("../models/postsModels.js");
 
 module.exports.posts = async function (req, res) {
   try {
-    /*
-    var posts = await Posts.aggregate([
-      {
-        $lookup: {
-          from: "users",
-          localField: "user",
-          foreignField: "_id",
-          as: "user"
-        }
-      },
-      {
-        $unwind: "$user"
-      },
-      {
-        $lookup: {
-          from: "comments",
-          let: { postId: "$_id" },
-          pipeline: [
-            {
-              $match: { $expr: { $eq: ["$$postId", "$post"] } }
-            },
-            {
-              $lookup: {
-                from: "users",
-                localField: "user",
-                foreignField: "_id",
-                as: "user"
-              }
-            },
-            {
-              $unwind: "$user"
-            },
-            {
-              $project: {
-                user: {
-                  user: 1,
-                  avatar: 1
-                },
-                content: 1
-              }
-            }
-          ],
-          as: "comments"
-        }
-      },
-      {
-        $project: {
-          user: {
-            user: 1,
-            avatar: 1
-          },
-          image: 1,
-          content: 1,
-          likes: 1,
-          totalLike: 1,
-          comments: {
-            content: 1,
-            user: 1
-          }
-        }
-      }
-    ]);
-    */
-
     var posts = await Posts.find().sort({ createdAt: -1 }).populate({
       path: "user",
       select: "user avatar"
@@ -137,3 +73,20 @@ module.exports.createPost = async function (req, res) {
     res.status(500).json({ error });
   }
 };
+
+// module.exports.postsProfile = async function (req, res) {
+//   try {
+//     const username = req.params.username;
+//     console.log(username);
+//     var postsUser = await Posts.find({ user: username })
+//       .sort({ createdAt: -1 })
+//       .populate({
+//         path: "user",
+//         select: "user avatar"
+//       });
+
+//     return res.status(200).json({ postsUser });
+//   } catch (e) {
+//     res.status(400).json({ e });
+//   }
+// };

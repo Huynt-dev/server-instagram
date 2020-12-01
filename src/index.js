@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const path = require("path");
 const app = express();
 
-const isAuth = require("./middleware/isAuth.js");
+// const isAuth = require("./middleware/isAuth.js");
 
 const routerAuth = require("./routers/authRouter.js");
 const routerUsers = require("./routers/userRouter.js");
@@ -29,8 +29,8 @@ app.get("/", function (req, res) {
 
 app.use("/auth", routerAuth);
 app.use("/users", routerUsers);
-app.use("/posts", isAuth, routerPosts);
-app.use("/comment", isAuth, routerComment);
+app.use("/posts", routerPosts);
+app.use("/comment", routerComment);
 app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500).send("Something broke!");

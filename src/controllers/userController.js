@@ -1,4 +1,5 @@
 const users = require("../models/userModels.js");
+const posts = require("../models/postsModels");
 
 module.exports.users = async function (req, res) {
   var data = await users.find();
@@ -6,11 +7,21 @@ module.exports.users = async function (req, res) {
 };
 
 module.exports.profile = async (req, res) => {
-  var username = req.params.username;
-  var userProfile = await users.findOne({ user: username }).lean();
-  res.status(200).json({
-    userProfile
-  });
+  try {
+    var username = req.params.username;
+    var userProfile = await users
+      .findOne({ user: username })
+      .select("_id email name user avatar")
+      .lean();
+    var postOfUser = await posts.find({ user: userProfile._id });
+
+    res.status(200).json({
+      userProfile,
+      postOfUser
+    });
+  } catch (error) {
+    res.status(400).json({ error });
+  }
 };
 
 module.exports.friend = async (req, res) => {
