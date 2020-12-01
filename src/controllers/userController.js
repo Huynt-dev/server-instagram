@@ -13,7 +13,9 @@ module.exports.profile = async (req, res) => {
       .findOne({ user: username })
       .select("_id email name user avatar")
       .lean();
-    var postOfUser = await posts.find({ user: userProfile._id });
+    var postOfUser = await posts
+      .find({ user: userProfile._id })
+      .select("image");
 
     res.status(200).json({
       userProfile,
