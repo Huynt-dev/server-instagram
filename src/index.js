@@ -6,12 +6,13 @@ const mongoose = require("mongoose");
 const path = require("path");
 const app = express();
 
-// const isAuth = require("./middleware/isAuth.js");
+// const isAuth = require("./middleware/isAuth.js")
 
 const routerAuth = require("./routers/authRouter.js");
 const routerUsers = require("./routers/userRouter.js");
 const routerPosts = require("./routers/postsRouter.js");
 const routerComment = require("./routers/commentRouter");
+const routerFollow = require("./routers/followRouter");
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -31,6 +32,8 @@ app.use("/auth", routerAuth);
 app.use("/users", routerUsers);
 app.use("/posts", routerPosts);
 app.use("/comment", routerComment);
+app.use("/follow", routerFollow);
+
 app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500).send("Something broke!");

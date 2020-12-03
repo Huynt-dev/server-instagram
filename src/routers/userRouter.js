@@ -8,4 +8,5 @@ users.get("/", isAuth, userController.users);
 users.get("/:username/profile", isAuth, userController.profile);
 
 users.get("/friend", isAuth, userController.friend);
+
 module.exports = users;
