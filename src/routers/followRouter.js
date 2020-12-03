@@ -5,4 +5,6 @@ const isAuth = require("../middleware/isAuth.js");
 
 follow.post("/following", isAuth, followController.follow);
 
+follow.post("/unfollow", isAuth, followController.unfollow);
+
 module.exports = follow;

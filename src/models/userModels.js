@@ -9,11 +9,11 @@ var userSchema = new mongoose.Schema({
     default: "https://robohash.org/temporibusonisadipisci.png?size=300x300"
   },
   password: String,
-  totalFolower: {
+  totalFollower: {
     type: Number,
     default: 0
   },
-  totalFolowing: {
+  totalFollowing: {
     type: Number,
     default: 0
   }

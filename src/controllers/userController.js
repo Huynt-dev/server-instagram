@@ -1,5 +1,6 @@
 const users = require("../models/userModels.js");
 const posts = require("../models/postsModels");
+const follows = require("../models/followModels");
 
 module.exports.users = async function (req, res) {
   var data = await users.find();
@@ -11,15 +12,24 @@ module.exports.profile = async (req, res) => {
     var username = req.params.username;
     var userProfile = await users
       .findOne({ user: username })
-      .select("_id email name user avatar")
+      .select({ password: 0 })
       .lean();
     var postOfUser = await posts
       .find({ user: userProfile._id })
       .select("image");
 
+    var isFollow = await follows.findOne({
+      user: req.user._id,
+      followingUser: userProfile._id
+    });
+
+    // { follow }
+    // null
+
     res.status(200).json({
       userProfile,
-      postOfUser
+      postOfUser,
+      isFollow: !!isFollow
     });
   } catch (error) {
     res.status(400).json({ error });
