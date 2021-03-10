@@ -6,6 +6,11 @@ const mongoose = require("mongoose");
 const path = require("path");
 const app = express();
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", process.env.CORS);
+  next();
+});
+
 // const isAuth = require("./middleware/isAuth.js")
 
 const routerAuth = require("./routers/authRouter.js");
@@ -21,7 +26,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 });
 
 app.get("/", function (req, res) {
