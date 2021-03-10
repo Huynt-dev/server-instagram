@@ -41,7 +41,7 @@ app.use(function (err, req, res, next) {
 
 mongoose.connection.on("connected", () => {
   console.log("Connected !!!!!");
-  app.listen(process.env.PORT, () => {
+  app.listen(process.env.PORT || 8080, () => {
     console.log("Server is running");
   });
 });
