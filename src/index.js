@@ -25,7 +25,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 });
 
 app.get("/", function (req, res) {
-  res.send("Hello World!");
+  res.send("Server is running");
 });
 
 app.use("/auth", routerAuth);
@@ -41,7 +41,7 @@ app.use(function (err, req, res, next) {
 
 mongoose.connection.on("connected", () => {
   console.log("Connected !!!!!");
-  app.listen(process.env.PORT || 8080, () => {
+  app.listen(process.env.PORT || 80, () => {
     console.log("Server is running");
   });
 });
