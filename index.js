@@ -18,11 +18,11 @@ app.use(function (req, res, next) {
 
 // const isAuth = require("./middleware/isAuth.js")
 
-const routerAuth = require("./routers/authRouter.js");
-const routerUsers = require("./routers/userRouter.js");
-const routerPosts = require("./routers/postsRouter.js");
-const routerComment = require("./routers/commentRouter");
-const routerFollow = require("./routers/followRouter");
+const routerAuth = require("./src/routers/authRouter.js");
+const routerUsers = require("./src/routers/userRouter.js");
+const routerPosts = require("./src/routers/postsRouter.js");
+const routerComment = require("./src/routers/commentRouter");
+const routerFollow = require("./src/routers/followRouter");
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
