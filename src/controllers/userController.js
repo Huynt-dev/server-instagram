@@ -20,16 +20,13 @@ module.exports.profile = async (req, res) => {
 
     var isFollow = await follows.findOne({
       user: req.user._id,
-      followingUser: userProfile._id
+      followingUser: userProfile._id,
     });
-
-    // { follow }
-    // null
 
     res.status(200).json({
       userProfile,
       postOfUser,
-      isFollow: !!isFollow
+      isFollow: !!isFollow,
     });
   } catch (error) {
     res.status(400).json({ error });
@@ -41,8 +38,8 @@ module.exports.friend = async (req, res) => {
     const dataFriend = await users
       .find({
         _id: {
-          $ne: req.user._id
-        }
+          $ne: req.user._id,
+        },
       })
       .select("email name user avatar")
       .limit(5);

@@ -1,10 +1,19 @@
 const Posts = require("../models/postsModels.js");
 
+const cloudinary = require("cloudinary").v2;
+require("dotenv").config();
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
+
 module.exports.posts = async function (req, res) {
   try {
     var posts = await Posts.find().sort({ createdAt: -1 }).populate({
       path: "user",
-      select: "user avatar"
+      select: "user avatar",
     });
 
     return res.status(200).json({ posts });
@@ -23,11 +32,11 @@ module.exports.likePost = async function (req, res) {
       { _id: postId },
       {
         $pull: {
-          likes: userId
+          likes: userId,
         },
         $inc: {
-          totalLike: -1
-        }
+          totalLike: -1,
+        },
       },
       { new: true }
     );
@@ -38,11 +47,11 @@ module.exports.likePost = async function (req, res) {
       { _id: postId },
       {
         $push: {
-          likes: userId
+          likes: userId,
         },
         $inc: {
-          totalLike: 1
-        }
+          totalLike: 1,
+        },
       },
       { new: true }
     );
@@ -55,16 +64,32 @@ module.exports.createPost = async function (req, res) {
   try {
     const { postNew } = req.body;
 
+    const path = req.file.path;
+    const uniqueFilename = new Date().toISOString();
+
+    const imageUpload = await cloudinary.uploader.upload(
+      path,
+      { public_id: `instagram/${uniqueFilename}`, tags: `instagram` },
+      function (err, result) {
+        if (err) return res.send(err);
+        // console.log("file uploaded to Cloudinary");
+        // remove file from server
+        const fs = require("fs");
+        fs.unlinkSync(path);
+        return result;
+      }
+    );
+
     const post = await Posts.create({
       user: req.user._id,
       content: postNew,
-      image: req.file.filename
+      image: imageUpload.url,
     });
 
     await post
       .populate({
         path: "user",
-        select: "avatar user"
+        select: "avatar user",
       })
       .execPopulate();
     return res.status(200).json({ post });

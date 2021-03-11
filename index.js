@@ -4,7 +4,6 @@ const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
-const http = require("https");
 const app = express();
 
 var corsOptions = {

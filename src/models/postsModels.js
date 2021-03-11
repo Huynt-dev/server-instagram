@@ -4,23 +4,25 @@ var postSchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Types.ObjectId,
-      ref: "user"
+      ref: "user",
     },
     image: String,
     content: String,
     likes: {
       type: Array,
-      default: []
+      default: [],
     },
     totalLike: {
       type: Number,
-      default: 0
+      default: 0,
     },
     totalComment: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
+    expire_at: { type: Date, default: Date.now, expires: 43200 },
   },
+
   { timestamps: true }
 );
 
