@@ -18,7 +18,7 @@ const routerPosts = require("./src/routers/postsRouter.js");
 const routerComment = require("./src/routers/commentRouter");
 const routerFollow = require("./src/routers/followRouter");
 
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
