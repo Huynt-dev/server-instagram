@@ -4,14 +4,19 @@ const cors = require("cors");
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+const http = require("https");
 const app = express();
 
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", process.env.CORS);
-
-  res.header(
+  res.setHeader("Access-Control-Allow-Origin", process.env.CORS);
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,HEAD,OPTIONS,POST,PUT,DELETE"
+  );
+  res.setHeader(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization, access-control-allow-origin"
   );
   next();
 });
