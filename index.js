@@ -7,21 +7,10 @@ const path = require("path");
 const http = require("https");
 const app = express();
 
-app.use(function (req, res, next) {
-  res.setHeader("Access-Control-Allow-Origin", process.env.CORS);
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,HEAD,OPTIONS,POST,PUT,DELETE"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization, access-control-allow-origin"
-  );
-  next();
-});
-
-// const isAuth = require("./middleware/isAuth.js")
+var corsOptions = {
+  origin: process.env.CORS,
+  optionsSuccessStatus: 200,
+};
 
 const routerAuth = require("./src/routers/authRouter.js");
 const routerUsers = require("./src/routers/userRouter.js");
@@ -29,7 +18,7 @@ const routerPosts = require("./src/routers/postsRouter.js");
 const routerComment = require("./src/routers/commentRouter");
 const routerFollow = require("./src/routers/followRouter");
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
