@@ -20,7 +20,6 @@ var postSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    expire_at: { type: Date, default: Date.now, expires: 43200 },
   },
 
   { timestamps: true }

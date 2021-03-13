@@ -11,10 +11,14 @@ cloudinary.config({
 
 module.exports.posts = async function (req, res) {
   try {
-    var posts = await Posts.find().sort({ createdAt: -1 }).populate({
-      path: "user",
-      select: "user avatar",
-    });
+    const { limit } = req.query;
+    var posts = await Posts.find()
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "user",
+        select: "user avatar",
+      })
+      .limit(parseInt(limit));
 
     return res.status(200).json({ posts });
   } catch (e) {
