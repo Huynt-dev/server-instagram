@@ -8,7 +8,6 @@ const app = express();
 
 var corsOptions = {
   origin: process.env.CORS,
-  optionsSuccessStatus: 200,
 };
 
 const routerAuth = require("./src/routers/authRouter.js");
