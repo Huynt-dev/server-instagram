@@ -7,12 +7,12 @@ module.exports.follow = async (req, res) => {
     const user = await users.findOne({ _id: userId }).lean();
 
     if (!user) {
-      return res.status(400).json({ error: "user khong ton tai" });
+      return res.status(400).json({ error: "User không tồn tại" });
     }
 
     const following = await follows.create({
       user: req.user._id,
-      followingUser: user._id
+      followingUser: user._id,
     });
 
     // user của người được follow
@@ -20,8 +20,8 @@ module.exports.follow = async (req, res) => {
       { _id: userId },
       {
         $inc: {
-          totalFollower: 1
-        }
+          totalFollower: 1,
+        },
       }
     );
 
@@ -30,8 +30,8 @@ module.exports.follow = async (req, res) => {
       { _id: req.user._id },
       {
         $inc: {
-          totalFollowing: 1
-        }
+          totalFollowing: 1,
+        },
       }
     );
 
@@ -47,12 +47,12 @@ module.exports.unfollow = async (req, res) => {
     const user = await users.findOne({ _id: userId }).lean();
 
     if (!user) {
-      return res.status(400).json({ error: "user khong ton tai" });
+      return res.status(400).json({ error: "User không tồn tại" });
     }
 
     const unfollow = await follows.findOneAndDelete({
       user: req.user._id,
-      followingUser: user._id
+      followingUser: user._id,
     });
 
     // user của người được follow
@@ -60,8 +60,8 @@ module.exports.unfollow = async (req, res) => {
       { _id: userId },
       {
         $inc: {
-          totalFollower: -1
-        }
+          totalFollower: -1,
+        },
       }
     );
 
@@ -70,8 +70,8 @@ module.exports.unfollow = async (req, res) => {
       { _id: req.user._id },
       {
         $inc: {
-          totalFollowing: -1
-        }
+          totalFollowing: -1,
+        },
       }
     );
 

@@ -14,7 +14,7 @@ posts.put("/:id/like", isAuth, postsController.likePost);
 posts.post(
   "/create",
   isAuth,
-
+  upload.single("picture"),
   postsController.createPost
 );
 

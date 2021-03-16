@@ -71,23 +71,10 @@ module.exports.createPost = async function (req, res) {
     const path = req.file.path;
     const uniqueFilename = new Date().toISOString();
 
-    const imageUpload = await cloudinary.uploader.upload(
-      path,
-      { public_id: `instagram/${uniqueFilename}`, tags: `instagram` },
-      function (err, result) {
-        if (err) return res.send(err);
-        // console.log("file uploaded to Cloudinary");
-        // remove file from server
-        const fs = require("fs");
-        fs.unlinkSync(path);
-        return result;
-      }
-    );
-
     const post = await Posts.create({
       user: req.user._id,
       content: postNew,
-      image: imageUpload.secure_url,
+      image: "test",
     });
 
     await post
