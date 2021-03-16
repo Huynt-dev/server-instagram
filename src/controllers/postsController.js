@@ -87,7 +87,7 @@ module.exports.createPost = async function (req, res) {
     const post = await Posts.create({
       user: req.user._id,
       content: postNew,
-      image: imageUpload.url,
+      image: imageUpload.secure_url,
     });
 
     await post
