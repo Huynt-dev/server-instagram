@@ -11,15 +11,31 @@ cloudinary.config({
 
 module.exports.posts = async function (req, res) {
   try {
-    const { limit } = req.query;
+    const limit = 2;
     var posts = await Posts.find()
-      .sort({ createdAt: -1 })
       .populate({
         path: "user",
         select: "user avatar",
       })
-      .limit(parseInt(limit));
+      .limit(limit)
+      .sort({ createdAt: -1 });
+    return res.status(200).json({ posts });
+  } catch (e) {
+    res.status(400).json({ e });
+  }
+};
 
+module.exports.InfiniteScroll = async function (req, res) {
+  try {
+    const { limit, page } = req.query;
+    var posts = await Posts.find()
+      .populate({
+        path: "user",
+        select: "user avatar",
+      })
+      .limit(parseInt(limit))
+      .skip(parseInt(limit * page))
+      .sort({ createdAt: -1 });
     return res.status(200).json({ posts });
   } catch (e) {
     res.status(400).json({ e });

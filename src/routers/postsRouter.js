@@ -7,6 +7,7 @@ const isAuth = require("../middleware/isAuth.js");
 
 posts.get("/", isAuth, postsController.posts);
 
+posts.get("/more", isAuth, postsController.InfiniteScroll);
 // posts.get("/:username", isAuth, postsController.postsProfile);
 
 posts.put("/:id/like", isAuth, postsController.likePost);
